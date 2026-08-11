@@ -88,13 +88,13 @@ export function transform(vec: Vectorizer, text: string): Float64Array {
   const x = new Float64Array(vec.features.length);
   for (const token of preprocess(text)) {
     const i = vec.vocabulary.get(token);
-    if (i !== undefined) x[i] += 1;
+    if (i !== undefined) x[i] = (x[i] ?? 0) + 1;
   }
-  for (let i = 0; i < x.length; i++) if (x[i]) x[i] *= vec.idf[i];
+  for (let i = 0; i < x.length; i++) if (x[i]) x[i] = x[i]! * vec.idf[i]!;
   let norm = 0;
-  for (let i = 0; i < x.length; i++) norm += x[i] * x[i];
+  for (let i = 0; i < x.length; i++) norm += x[i]! * x[i]!;
   norm = Math.sqrt(norm);
-  if (norm > 0) for (let i = 0; i < x.length; i++) x[i] /= norm;
+  if (norm > 0) for (let i = 0; i < x.length; i++) x[i] = x[i]! / norm;
   return x;
 }
 
@@ -114,7 +114,7 @@ export function trainLogistic(
   y: Label[],
   { epochs = 400, lr = 1.2, l2 = 0.0015 } = {},
 ): LogisticModel {
-  const d = X[0].length;
+  const d = X[0]!.length;
   const weights = new Float64Array(d);
   let bias = 0;
 
@@ -122,15 +122,15 @@ export function trainLogistic(
     const grad = new Float64Array(d);
     let gradB = 0;
     for (let i = 0; i < X.length; i++) {
-      const xi = X[i];
+      const xi = X[i]!;
       let z = bias;
-      for (let j = 0; j < d; j++) if (xi[j]) z += weights[j] * xi[j];
-      const err = sigmoid(z) - y[i];
-      for (let j = 0; j < d; j++) if (xi[j]) grad[j] += err * xi[j];
+      for (let j = 0; j < d; j++) if (xi[j]) z += weights[j]! * xi[j]!;
+      const err = sigmoid(z) - y[i]!;
+      for (let j = 0; j < d; j++) if (xi[j]) grad[j] = grad[j]! + err * xi[j]!;
       gradB += err;
     }
     const m = X.length;
-    for (let j = 0; j < d; j++) weights[j] -= lr * (grad[j] / m + l2 * weights[j]);
+    for (let j = 0; j < d; j++) weights[j] = weights[j]! - lr * (grad[j]! / m + l2 * weights[j]!);
     bias -= lr * (gradB / m);
   }
 
@@ -139,7 +139,7 @@ export function trainLogistic(
 
 export function predictProba(model: LogisticModel, x: Float64Array): number {
   let z = model.bias;
-  for (let j = 0; j < x.length; j++) if (x[j]) z += model.weights[j] * x[j];
+  for (let j = 0; j < x.length; j++) if (x[j]) z += model.weights[j]! * x[j]!;
   return sigmoid(z);
 }
 
@@ -162,7 +162,7 @@ export function evaluate(yTrue: Label[], yPred: Label[]): Metrics {
     fp = 0,
     fn = 0;
   yTrue.forEach((t, i) => {
-    const p = yPred[i];
+    const p = yPred[i]!;
     if (t === 1 && p === 1) tp++;
     else if (t === 0 && p === 0) tn++;
     else if (t === 0 && p === 1) fp++;
@@ -206,7 +206,7 @@ function seededShuffle<T>(items: T[], seed = 42): T[] {
   };
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
+    [out[i], out[j]] = [out[j]!, out[i]!];
   }
   return out;
 }
@@ -230,7 +230,7 @@ export function getPipeline(data: NewsSample[] = DATASET): Pipeline {
     set.map((s) => (predictProba(model, transform(vectorizer, s.text)) >= 0.5 ? 1 : 0) as Label);
 
   const weighted = vectorizer.features
-    .map((term, i) => ({ term, weight: model.weights[i] }))
+    .map((term, i) => ({ term, weight: model.weights[i] ?? 0 }))
     .sort((a, b) => b.weight - a.weight);
 
   cached = {
@@ -247,7 +247,7 @@ export function getPipeline(data: NewsSample[] = DATASET): Pipeline {
     topFake: weighted.slice(0, 12),
     topReal: weighted.slice(-12).reverse(),
   };
-  return cached;
+  return cached!;
 }
 
 /* ------------------------------------------------------------------ */
@@ -276,7 +276,7 @@ export function predictNews(text: string): Prediction {
   const influential = Array.from(new Set(known))
     .map((term) => {
       const i = vectorizer.vocabulary.get(term)!;
-      return { term, contribution: model.weights[i] * x[i] };
+      return { term, contribution: (model.weights[i] ?? 0) * (x[i] ?? 0) };
     })
     .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution))
     .slice(0, 6);
