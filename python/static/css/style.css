@@ -1,0 +1,77 @@
+:root {
+  --bg: #f7f7f4;
+  --card: #ffffff;
+  --ink: #16192b;
+  --muted: #626a80;
+  --line: #e2e4ec;
+  --primary: #2f4bd8;
+  --fake: #c1332b;
+  --real: #17804d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+header { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; }
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; }
+.nav a { color: var(--muted); text-decoration: none; margin-left: 18px; }
+.nav a:hover { color: var(--ink); }
+
+h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 40px 0 8px; letter-spacing: -0.02em; }
+.lead { color: var(--muted); max-width: 640px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 22px;
+}
+
+label { font-weight: 600; font-size: 0.9rem; }
+
+textarea {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  resize: vertical;
+}
+textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
+
+.meta { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 0.8rem; margin-top: 8px; }
+.error { color: var(--fake); font-size: 0.9rem; font-weight: 600; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+button { font: inherit; padding: 10px 20px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.primary { background: var(--primary); color: #fff; }
+.ghost { background: #fff; border-color: var(--line); color: var(--ink); }
+
+.tag { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--muted); margin: 0; }
+.result h2 { margin: 4px 0 14px; font-size: 1.6rem; }
+.result.fake h2 { color: var(--fake); }
+.result.real h2 { color: var(--real); }
+
+.bar { height: 10px; background: #eceef5; border-radius: 999px; overflow: hidden; }
+.bar div { height: 100%; width: 0; transition: width 0.4s ease; }
+.result.fake .bar div { background: var(--fake); }
+.result.real .bar div { background: var(--real); }
+
+footer { color: var(--muted); font-size: 0.85rem; padding: 40px 0; }
+
+@media (max-width: 520px) {
+  .nav { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .nav a { margin: 0 14px 0 0; }
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fake News Detection Using Machine Learning</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <header>
+      <div class="wrap nav">
+        <strong>VeriNews</strong>
+        <nav><a href="/">Detector</a> <a href="/about">About Project</a></nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <h1>Fake News Detection Using Machine Learning</h1>
+      <p class="lead">
+        Paste a news article or headline. The TF-IDF + Logistic Regression model predicts whether it is
+        REAL or FAKE news with a confidence score.
+      </p>
+
+      <section class="card">
+        <label for="newsText">News article or headline</label>
+        <textarea id="newsText" rows="9" placeholder="Paste the news content here..."></textarea>
+        <div class="meta"><span id="counter">0 characters</span><span>Minimum 20 characters</span></div>
+        <p id="error" class="error" role="alert" hidden></p>
+        <div class="actions">
+          <button id="checkBtn" class="primary">Check News</button>
+          <button id="clearBtn" class="ghost">Clear</button>
+        </div>
+      </section>
+
+      <section id="result" class="card result" hidden>
+        <p class="tag">Prediction</p>
+        <h2 id="label"></h2>
+        <div class="bar"><div id="fill"></div></div>
+        <p id="confidence" class="meta"></p>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <p>Final-year AI/ML project · Flask + scikit-learn · TF-IDF + Logistic Regression</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

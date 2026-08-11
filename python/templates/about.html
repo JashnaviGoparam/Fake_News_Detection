@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About — Fake News Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <header>
+      <div class="wrap nav">
+        <strong>VeriNews</strong>
+        <nav><a href="/">Detector</a> <a href="/about">About Project</a></nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <h1>About the Project</h1>
+      <p class="lead">
+        An automated system that classifies news text as real or fake using Natural Language Processing and
+        supervised Machine Learning.
+      </p>
+
+      <section class="card">
+        <h2>Dataset</h2>
+        <p>
+          Kaggle "Fake and Real News Dataset" — <code>True.csv</code> (~21,417 genuine articles) and
+          <code>Fake.csv</code> (~23,481 fabricated articles). Columns: title, text, subject, date.
+          Labels: REAL = 0, FAKE = 1. Split 80% training / 20% testing, stratified, random_state = 42.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Algorithm</h2>
+        <p>
+          Text is cleaned (lowercasing, URL/HTML/punctuation removal, stop-word removal, Porter stemming)
+          and vectorised with <code>TfidfVectorizer(stop_words='english', max_df=0.7)</code>.
+          <strong>Logistic Regression</strong> then models P(fake | x) = sigmoid(w·x + b); a probability of
+          0.5 or higher is labelled FAKE. Multinomial Naive Bayes and Random Forest are trained for
+          comparison in <code>train_model.py</code>.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Results</h2>
+        <p>
+          Logistic Regression ≈ 96% accuracy, Random Forest ≈ 96%, Multinomial Naive Bayes ≈ 93% on the
+          held-out test set. Confusion matrices and the comparison chart are written to
+          <code>results/</code> when training runs.
+        </p>
+      </section>
+    </main>
+
+    <footer class="wrap"><p>Final-year AI/ML project · Flask + scikit-learn</p></footer>
+  </body>
+</html>
