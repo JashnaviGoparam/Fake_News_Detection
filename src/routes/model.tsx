@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import {
   Bar,
@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Award, Brain, Database, FlaskConical, LineChart, Sparkles } from "lucide-react";
 
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { DATASET_INFO } from "@/lib/dataset";
@@ -59,16 +60,40 @@ function ModelPage() {
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12 sm:px-6">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Model, Dataset & Results</h1>
-        <p className="text-muted-foreground mt-3 max-w-3xl">
-          All numbers below are computed live in the browser by re-training the same pipeline used in the Python
-          implementation: text cleaning → TF-IDF vectorization → Logistic Regression, evaluated on a held-out 20%
-          test split.
-        </p>
+        {/* Hero */}
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-background to-background p-8 sm:p-12">
+          <div className="relative z-10">
+            <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              <Sparkles className="size-3.5" /> Live Evaluation
+            </p>
+            <h1 className="font-display mt-5 text-3xl font-semibold tracking-tight sm:text-5xl">
+              Model, Dataset & Results
+            </h1>
+            <p className="text-muted-foreground mt-4 max-w-3xl text-base leading-relaxed sm:text-lg">
+              All numbers below are computed live in the browser by re-training the same pipeline used in the Python
+              implementation: text cleaning → TF-IDF vectorization → Logistic Regression, evaluated on a held-out 20%
+              test split.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                <FlaskConical className="size-4" /> Try Detector
+              </Link>
+              <Link
+                to="/documentation"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <LineChart className="size-4" /> Read Report
+              </Link>
+            </div>
+          </div>
+        </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {metricData.map((m) => (
-            <div key={m.name} className="border-border bg-card rounded-xl border p-5">
+            <div key={m.name} className="rounded-2xl border bg-card p-5 text-center">
               <p className="text-muted-foreground text-xs tracking-wide uppercase">{m.name}</p>
               <p className="mt-2 text-3xl font-semibold">{m.value}%</p>
             </div>
@@ -76,7 +101,7 @@ function ModelPage() {
         </div>
 
         <section className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Card title="Performance metrics">
+          <Card title="Performance metrics" icon={Award}>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={metricData} margin={{ left: -20 }}>
@@ -96,7 +121,7 @@ function ModelPage() {
             </div>
           </Card>
 
-          <Card title="Algorithm comparison (reference runs on full dataset)">
+          <Card title="Algorithm comparison (reference runs on full dataset)" icon={Brain}>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={compareData} margin={{ left: -20 }}>
@@ -120,7 +145,7 @@ function ModelPage() {
             </div>
           </Card>
 
-          <Card title="Confusion matrix (test set)">
+          <Card title="Confusion matrix (test set)" icon={Database}>
             <div className="grid grid-cols-[auto_1fr_1fr] gap-2 text-center text-sm">
               <div />
               <div className="text-muted-foreground text-xs">Predicted REAL</div>
@@ -140,7 +165,7 @@ function ModelPage() {
             </p>
           </Card>
 
-          <Card title="Most informative features">
+          <Card title="Most informative features" icon={LineChart}>
             <div className="grid gap-6 sm:grid-cols-2">
               <FeatureList title="Pushes towards FAKE" items={p.topFake} tone="bad" />
               <FeatureList title="Pushes towards REAL" items={p.topReal} tone="good" />
@@ -149,7 +174,7 @@ function ModelPage() {
         </section>
 
         <section className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Card title="Dataset">
+          <Card title="Dataset" icon={Database}>
             <dl className="space-y-2 text-sm">
               <Item k="Name" v={DATASET_INFO.name} />
               <Item k="Source" v={DATASET_INFO.source} />
@@ -161,7 +186,7 @@ function ModelPage() {
             </dl>
           </Card>
 
-          <Card title="Pipeline hyper-parameters">
+          <Card title="Pipeline hyper-parameters" icon={FlaskConical}>
             <dl className="space-y-2 text-sm">
               <Item k="Cleaning" v="lowercase, URL/HTML/punctuation removal, stop-word removal, stemming" />
               <Item k="Vectorizer" v="TfidfVectorizer(stop_words='english', max_df=0.7)" />
@@ -178,10 +203,23 @@ function ModelPage() {
   );
 }
 
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
+function Card({
+  title,
+  icon: Icon,
+  children,
+}: {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="border-border bg-card rounded-2xl border p-5 sm:p-6">
-      <h2 className="mb-4 text-lg font-semibold">{title}</h2>
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="grid size-8 place-items-center rounded-lg bg-primary/10 text-primary">
+          <Icon className="size-4" />
+        </div>
+        <h2 className="text-lg font-semibold">{title}</h2>
+      </div>
       {children}
     </div>
   );
@@ -189,7 +227,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 
 function Item({ k, v }: { k: string; v: string }) {
   return (
-    <div className="border-border/60 flex flex-wrap justify-between gap-x-6 gap-y-1 border-b pb-2 last:border-0">
+    <div className="flex flex-wrap justify-between gap-x-6 gap-y-1 border-b border-border/60 pb-2 last:border-0">
       <dt className="text-muted-foreground">{k}</dt>
       <dd className="text-right font-medium">{v}</dd>
     </div>
