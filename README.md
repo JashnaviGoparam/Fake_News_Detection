@@ -1,8 +1,7 @@
 # Friendly Greetings
 
-hi
 
-This project was built with [Lovable](https://lovable.dev).
+
 
 **Live app**: https://cheerful-mate-app.lovable.app
 
