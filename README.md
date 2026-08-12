@@ -3,7 +3,7 @@
 
 
 
-**Live app**: https://cheerful-mate-app.lovable.app
+**Live app**: https://fake-news-detect01.lovable.app
 
 ## Build with Lovable
 
