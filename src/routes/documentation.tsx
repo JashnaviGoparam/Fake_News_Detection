@@ -1,4 +1,30 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  Award,
+  BookOpen,
+  Brain,
+  CheckCircle2,
+  Cpu,
+  Database,
+  FlaskConical,
+  Globe,
+  GraduationCap,
+  Layers,
+  LayoutTemplate,
+  Lightbulb,
+  LineChart,
+  ListChecks,
+  Monitor,
+  Rocket,
+  Search,
+  Server,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Terminal,
+  Workflow,
+  Zap,
+} from "lucide-react";
 
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import {
@@ -7,6 +33,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/documentation")({
   head: () => ({
@@ -15,7 +42,7 @@ export const Route = createFileRoute("/documentation")({
       {
         name: "description",
         content:
-          "Complete academic documentation: abstract, introduction, existing vs proposed system, methodology, algorithms, results, limitations, future scope, references and viva questions with answers.",
+          "Complete academic documentation: abstract, introduction, existing vs proposed system, methodology, algorithms, results, advantages, future scope, references, screenshots and viva questions with answers.",
       },
       { property: "og:title", content: "Project Report & Viva Questions — Fake News Detection" },
       {
@@ -29,167 +56,104 @@ export const Route = createFileRoute("/documentation")({
   component: Documentation,
 });
 
-const report: { title: string; body: string[]; list?: string[] }[] = [
+const objectives = [
+  { icon: Search, text: "Study existing approaches for automated misinformation detection." },
+  { icon: Database, text: "Collect and prepare a balanced dataset of real and fake news articles." },
+  { icon: Workflow, text: "Apply NLP preprocessing for noise removal and normalisation." },
+  { icon: FlaskConical, text: "Extract features using the TF-IDF weighting scheme." },
+  { icon: Brain, text: "Train and compare Logistic Regression, Naive Bayes and Random Forest classifiers." },
+  { icon: LineChart, text: "Evaluate models with accuracy, precision, recall, F1-score and a confusion matrix." },
+  { icon: Server, text: "Persist the best model and expose it through a Flask REST API." },
+  { icon: LayoutTemplate, text: "Design a responsive, validated web interface that reports the prediction and confidence." },
+];
+
+const requirements = [
+  { icon: Cpu, title: "Hardware", text: "Intel i3 or higher, 4 GB RAM (8 GB recommended), 2 GB free disk space." },
+  { icon: Monitor, title: "Operating System", text: "Windows 10/11, Linux or macOS with a modern browser." },
+  { icon: Terminal, title: "Development Tools", text: "Python 3.9+, pip, VS Code / PyCharm, Git." },
+  { icon: FlaskConical, title: "Python Libraries", text: "pandas, numpy, scikit-learn, nltk, flask, flask-cors, joblib, matplotlib, seaborn." },
+  { icon: Globe, title: "Frontend Stack", text: "HTML5, CSS3, JavaScript / React for the interactive demo." },
+  { icon: Database, title: "Database", text: "SQLite 3 (bundled with Python) for prediction logging." },
+];
+
+const methodology = [
+  { step: "01", title: "Data Collection", text: "True.csv and Fake.csv from the Kaggle Fake and Real News Dataset, ~44,898 rows in total." },
+  { step: "02", title: "Labelling & Merging", text: "real = 0, fake = 1; the two frames are concatenated and shuffled for unbiased training." },
+  { step: "03", title: "Text Preprocessing", text: "Lowercasing, URL/HTML/punctuation/digit removal, tokenization, stop-word removal and Porter stemming." },
+  { step: "04", title: "Feature Extraction", text: "TfidfVectorizer(stop_words='english', max_df=0.7) builds a sparse weighted term-document matrix." },
+  { step: "05", title: "Train-Test Split", text: "80% training / 20% testing with stratify=y and random_state=42 for reproducibility." },
+  { step: "06", title: "Model Training", text: "Logistic Regression, Multinomial Naive Bayes and Random Forest are fitted on the training matrix." },
+  { step: "07", title: "Evaluation", text: "accuracy_score, classification_report and confusion_matrix; graphs plotted with matplotlib and seaborn." },
+  { step: "08", title: "Deployment", text: "The best model and fitted vectorizer are saved with joblib and loaded once by the Flask application." },
+];
+
+const algorithms = [
   {
-    title: "1. Abstract",
-    body: [
-      "The rapid growth of online media has made it easy to publish and circulate misleading news, which can influence public opinion, damage reputations and even threaten public safety. Manual fact-checking cannot keep pace with the volume of content produced every day. This project presents an automated Fake News Detection System that uses Natural Language Processing and supervised Machine Learning to classify a news article or headline as REAL or FAKE.",
-      "News text is cleaned using NLP techniques (lowercasing, punctuation and URL removal, stop-word removal and stemming) and converted into numerical features using TF-IDF vectorization. Classification models — Logistic Regression, Multinomial Naive Bayes and Random Forest — are trained on the Kaggle Fake and Real News Dataset and compared using accuracy, precision, recall and F1-score. The best model achieves over 95% accuracy on the held-out test set. The trained model is serialised with joblib and deployed through a Flask REST API, with a responsive web interface where a user can paste news text and instantly receive the predicted label along with a confidence percentage.",
-    ],
+    icon: Search,
+    title: "TF-IDF Vectorization",
+    text: "Weights each term by its frequency in a document and rarity across the corpus. Common words are down-weighted while discriminative words dominate, producing a high-dimensional sparse feature matrix ideal for text classification.",
   },
   {
-    title: "2. Introduction",
-    body: [
-      "News is no longer consumed only through newspapers and television. Social networks, messaging apps and content aggregators deliver information instantly and without editorial control. This freedom has a cost: false or deliberately manipulated stories, commonly called fake news, spread faster and wider than verified reporting.",
-      "Machine Learning offers a practical solution. Fake and real news differ statistically — in vocabulary, sensationalism, punctuation and writing style. A supervised classifier trained on a large labelled corpus can learn these patterns and generalise to unseen articles. This project implements such a classifier end-to-end and packages it as an easy-to-use web application.",
-    ],
+    icon: LineChart,
+    title: "Logistic Regression",
+    text: "Models P(fake | x) = sigmoid(w·x + b). It is linear, fast, interpretable and works extremely well on sparse TF-IDF features, making it the primary classifier of this project.",
   },
   {
-    title: "3. Problem Statement",
-    body: [
-      "There is no simple, accessible tool for an ordinary reader to check whether a news item is likely to be fabricated. Professional fact-checking is accurate but slow, manual and limited in coverage. The problem is therefore to design and implement an automated system that accepts free-form news text, analyses its linguistic content and returns a reliable REAL/FAKE classification with a measure of confidence, in real time and through a simple interface.",
-    ],
+    icon: Zap,
+    title: "Multinomial Naive Bayes",
+    text: "Applies Bayes' theorem with a conditional independence assumption. Extremely fast to train and a strong baseline for text classification tasks.",
   },
   {
-    title: "4. Objectives",
-    body: [],
-    list: [
-      "To study existing approaches for automated misinformation detection.",
-      "To collect and prepare a balanced dataset of real and fake news articles.",
-      "To apply NLP preprocessing for noise removal and normalisation.",
-      "To extract features using the TF-IDF weighting scheme.",
-      "To train and compare Logistic Regression, Naive Bayes and Random Forest classifiers.",
-      "To evaluate the models with accuracy, precision, recall, F1-score and a confusion matrix.",
-      "To persist the best model and expose it through a Flask REST API.",
-      "To design a responsive, validated web interface that reports the prediction and confidence.",
-    ],
+    icon: Layers,
+    title: "Random Forest",
+    text: "An ensemble of decision trees using bagging and random feature selection. It captures non-linear interactions and reduces overfitting while serving as a comparison model.",
   },
-  {
-    title: "5. Existing System",
-    body: [
-      "Current practice relies mainly on manual verification by journalists and fact-checking organisations, and on platform-level moderation such as user reporting and blacklists of known unreliable domains.",
-    ],
-    list: [
-      "Limitation: manual verification is slow and cannot scale to millions of daily posts.",
-      "Limitation: source-based blacklists fail when false content is published on new or credible-looking domains.",
-      "Limitation: keyword filters are rigid and easily bypassed by rewording.",
-      "Limitation: results are not available to the reader at the moment of reading.",
-      "Limitation: human judgement can be inconsistent or biased.",
-    ],
-  },
-  {
-    title: "6. Proposed System",
-    body: [
-      "The proposed system automates detection using content-based machine learning. The user pastes a news article or headline into a web page and clicks Check News. The backend cleans the text, converts it into a TF-IDF feature vector using the vectorizer fitted at training time, and passes it to the trained classifier, which outputs a class label together with a probability. The result and its confidence are displayed immediately, and the query is logged into a database.",
-    ],
-    list: [
-      "Advantage: analyses the content itself, not just the source.",
-      "Advantage: instant, real-time prediction through a REST API.",
-      "Advantage: gives a confidence score instead of a bare yes/no.",
-      "Advantage: retrainable — accuracy improves as more data is added.",
-      "Advantage: lightweight, runs on ordinary hardware without a GPU.",
-    ],
-  },
-  {
-    title: "7. System Requirements",
-    body: [],
-    list: [
-      "Hardware: Intel i3 processor or higher, 4 GB RAM (8 GB recommended), 2 GB free disk space.",
-      "Operating System: Windows 10/11, Linux or macOS.",
-      "Software: Python 3.9+, pip, a modern web browser, VS Code or PyCharm.",
-      "Python libraries: pandas, numpy, scikit-learn, nltk, flask, flask-cors, joblib, matplotlib, seaborn.",
-      "Frontend: HTML5, CSS3, JavaScript (or React for the SPA version).",
-      "Database: SQLite 3 (bundled with Python).",
-    ],
-  },
-  {
-    title: "8. Methodology",
-    body: [
-      "The project follows the standard supervised learning workflow.",
-    ],
-    list: [
-      "Data collection: True.csv (real articles) and Fake.csv (fabricated articles) from the Kaggle Fake and Real News Dataset, ~44,898 rows in total.",
-      "Data labelling and merging: real = 0, fake = 1; the two frames are concatenated and shuffled.",
-      "Text preprocessing: lowercasing, removal of URLs, HTML tags, punctuation and digits, tokenization, stop-word removal, stemming with the Porter stemmer.",
-      "Feature extraction: TfidfVectorizer(stop_words='english', max_df=0.7) converts the cleaned corpus into a sparse weighted term-document matrix.",
-      "Splitting: train_test_split(test_size=0.2, random_state=42, stratify=y).",
-      "Training: Logistic Regression, Multinomial Naive Bayes and Random Forest are each fitted on the training matrix.",
-      "Evaluation: accuracy_score, classification_report and confusion_matrix on the test set; graphs plotted with matplotlib and seaborn.",
-      "Deployment: the best model and the fitted vectorizer are saved with joblib and loaded once by the Flask application.",
-    ],
-  },
-  {
-    title: "9. Algorithms Used",
-    body: [
-      "TF-IDF (Term Frequency – Inverse Document Frequency): weights each term by how often it appears in a document and how rare it is across the corpus, so that common words are down-weighted and discriminative words dominate. tf-idf(t,d) = tf(t,d) × log((1+N)/(1+df(t))) + 1, followed by L2 normalisation.",
-      "Logistic Regression: models P(fake | x) = sigmoid(w·x + b). It is linear, fast, works extremely well on high-dimensional sparse text features and its coefficients are directly interpretable, which makes it the primary algorithm of this project.",
-      "Multinomial Naive Bayes: applies Bayes' theorem assuming conditional independence of terms. Extremely fast to train and a strong baseline for text classification.",
-      "Random Forest: an ensemble of decision trees using bagging and random feature selection. It captures non-linear interactions and reduces overfitting but is slower and less interpretable on sparse text.",
-    ],
-  },
-  {
-    title: "10. Results",
-    body: [
-      "On the full Kaggle dataset with an 80:20 stratified split, Logistic Regression reached approximately 96% accuracy, Multinomial Naive Bayes approximately 93%, and Random Forest approximately 96%. Precision, recall and F1-score for the FAKE class all stayed above 0.93 for the best model, and the confusion matrix showed a small and balanced number of false positives and false negatives.",
-      "The Model & Results page of this application recomputes the same metrics live on the bundled demo sample, so the accuracy, precision, recall, F1-score, confusion matrix and feature importances shown there are genuine outputs of the trained model, not static images.",
-    ],
-  },
-  {
-    title: "11. Advantages",
-    body: [],
-    list: [
-      "Fully automated and available 24×7 with sub-second response time.",
-      "Content-based, so it works even for unknown publishers.",
-      "Provides a confidence percentage and the words that influenced the decision.",
-      "Simple, interpretable model that a student can explain line by line.",
-      "Low resource requirement — no GPU or cloud service needed.",
-      "Modular design, so a new algorithm or dataset can be plugged in easily.",
-    ],
-  },
-  {
-    title: "12. Limitations",
-    body: [],
-    list: [
-      "Accuracy depends on the training dataset; performance drops on topics or writing styles not represented in it.",
-      "The model reads style and vocabulary, not facts — it cannot verify a claim against evidence.",
-      "It is trained on English news only.",
-      "Very short inputs (a few words) provide too little signal for a reliable decision.",
-      "TF-IDF ignores word order and context, so sarcasm and satire can be misclassified.",
-      "The model must be retrained periodically as language and news topics change.",
-    ],
-  },
-  {
-    title: "13. Future Scope",
-    body: [],
-    list: [
-      "Use contextual deep learning models such as LSTM, GRU or BERT for better semantic understanding.",
-      "Add multilingual support, especially regional Indian languages.",
-      "Integrate a live fact-checking API and source-credibility scoring.",
-      "Provide a browser extension and a mobile application.",
-      "Automatically fetch and analyse an article from a pasted URL.",
-      "Add an admin dashboard with prediction history, analytics and user feedback-driven retraining.",
-    ],
-  },
-  {
-    title: "14. Conclusion",
-    body: [
-      "This project successfully demonstrates that fake news can be detected automatically with high accuracy using classical Natural Language Processing and Machine Learning. TF-IDF vectorization combined with Logistic Regression provides an excellent balance of accuracy, speed and interpretability, achieving around 96% test accuracy. Wrapping the trained model in a Flask REST API and a responsive web interface turns the model into a usable product rather than a notebook experiment.",
-      "The system is not a replacement for professional fact-checking, but it is an effective first line of defence that helps readers pause before believing and sharing suspicious content. The modular architecture makes it straightforward to extend the work with deep learning models, multilingual data and live verification services.",
-    ],
-  },
-  {
-    title: "15. References",
-    body: [],
-    list: [
-      "Shu, K., Sliva, A., Wang, S., Tang, J., & Liu, H. (2017). Fake News Detection on Social Media: A Data Mining Perspective. ACM SIGKDD Explorations Newsletter.",
-      "Ahmed, H., Traore, I., & Saad, S. (2017). Detection of Online Fake News Using N-Gram Analysis and Machine Learning Techniques.",
-      "Kaggle: Clément Bisaillon, Fake and Real News Dataset — kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset",
-      "Pedregosa, F. et al. (2011). Scikit-learn: Machine Learning in Python. JMLR 12, 2825–2830.",
-      "Bird, S., Klein, E., & Loper, E. (2009). Natural Language Processing with Python (NLTK). O'Reilly Media.",
-      "Flask Documentation — flask.palletsprojects.com",
-      "Jurafsky, D. & Martin, J. H. Speech and Language Processing, 3rd edition draft.",
-    ],
-  },
+];
+
+const advantages = [
+  { icon: ShieldCheck, title: "Fully Automated", text: "Available 24×7 with sub-second response time and no manual intervention." },
+  { icon: Search, title: "Content-Based", text: "Analyses the article text itself, so it works even for unknown publishers." },
+  { icon: Lightbulb, title: "Explainable", text: "Returns a confidence percentage and highlights the words that influenced the decision." },
+  { icon: BookOpen, title: "Student Friendly", text: "Simple, interpretable model that a student can explain line by line during a viva." },
+  { icon: Cpu, title: "Lightweight", text: "Runs on ordinary hardware without a GPU or paid cloud service." },
+  { icon: Workflow, title: "Modular", text: "Clean separation of preprocessing, feature extraction, training and deployment." },
+];
+
+const futureScope = [
+  { icon: Brain, text: "Fine-tune contextual deep learning models such as LSTM, GRU or BERT for richer semantic understanding." },
+  { icon: Globe, text: "Add multilingual support, especially regional Indian languages, to broaden usability." },
+  { icon: ShieldCheck, text: "Integrate live fact-checking APIs and source-credibility scoring for layered verification." },
+  { icon: Monitor, text: "Provide a browser extension and a mobile application for instant on-the-go checks." },
+  { icon: Workflow, text: "Automatically fetch and analyse an article from a pasted URL." },
+  { icon: LineChart, text: "Add an admin dashboard with prediction history, analytics and feedback-driven retraining." },
+];
+
+const learningOutcomes = [
+  { icon: Database, text: "Hands-on experience with real-world text dataset collection, cleaning and labelling." },
+  { icon: FlaskConical, text: "Practical understanding of TF-IDF feature extraction and sparse matrix representation." },
+  { icon: Brain, text: "Training, comparing and evaluating multiple supervised classifiers using scikit-learn." },
+  { icon: LineChart, text: "Interpreting accuracy, precision, recall, F1-score and confusion matrices." },
+  { icon: Server, text: "Deploying a trained ML model through a Flask REST API with input validation." },
+  { icon: LayoutTemplate, text: "Building a responsive frontend that consumes an ML endpoint and visualises results." },
+];
+
+const screenshots = [
+  { title: "Home / Detector", desc: "A clean, centred textarea with sample inputs, validation and a prominent Check News button." },
+  { title: "Prediction Result Card", desc: "Displays REAL or FAKE label, confidence bar, P(fake) score and the most influential words." },
+  { title: "Model & Results Page", desc: "Live metrics, algorithm comparison chart, confusion matrix and top TF-IDF feature weights." },
+  { title: "About Project Page", desc: "Architecture diagram, technology stack, modules and folder structure for academic review." },
+  { title: "Project Report Page", desc: "Full academic documentation with accordion-style viva questions and answers." },
+  { title: "Flask Reference API", desc: "Python backend exposing POST /api/predict and GET /api/history with SQLite logging." },
+];
+
+const references = [
+  "Shu, K., Sliva, A., Wang, S., Tang, J., & Liu, H. (2017). Fake News Detection on Social Media: A Data Mining Perspective. ACM SIGKDD Explorations Newsletter.",
+  "Ahmed, H., Traore, I., & Saad, S. (2017). Detection of Online Fake News Using N-Gram Analysis and Machine Learning Techniques.",
+  "Kaggle: Clément Bisaillon, Fake and Real News Dataset — kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset",
+  "Pedregosa, F. et al. (2011). Scikit-learn: Machine Learning in Python. JMLR 12, 2825–2830.",
+  "Bird, S., Klein, E., & Loper, E. (2009). Natural Language Processing with Python (NLTK). O'Reilly Media.",
+  "Flask Documentation — flask.palletsprojects.com",
+  "Jurafsky, D. & Martin, J. H. Speech and Language Processing, 3rd edition draft.",
 ];
 
 const viva: [string, string][] = [
@@ -266,12 +230,8 @@ const viva: [string, string][] = [
     "Supervised — every training article carries a known label (real or fake), and the model learns the mapping from text features to that label.",
   ],
   [
-    "What are the limitations of your system?",
-    "It judges writing style and vocabulary, not facts; it works only for English; it depends heavily on the training data; very short inputs are unreliable; and TF-IDF loses word order so satire and sarcasm can be misread.",
-  ],
-  [
-    "How would you improve the project?",
-    "Fine-tune a transformer such as BERT for contextual understanding, add multilingual data, verify claims against a live fact-checking API, analyse the source URL and publication metadata, and set up periodic retraining with user feedback.",
+    "What are the future enhancements of your system?",
+    "Fine-tuning transformers like BERT for contextual understanding, adding multilingual support, integrating live fact-checking APIs, analysing source URLs, building a browser extension and mobile app, and adding an admin dashboard with feedback-driven retraining.",
   ],
   [
     "Why did you use Flask instead of Django?",
@@ -281,51 +241,350 @@ const viva: [string, string][] = [
     "What is the role of the database here?",
     "SQLite stores each submitted text with its predicted label, confidence and timestamp. This gives a prediction history, supports analytics, and provides real-world data that can be labelled and used for retraining later.",
   ],
+  [
+    "What makes this project suitable for a final-year AI/ML course?",
+    "It covers the complete ML pipeline — data collection, NLP preprocessing, feature extraction, model training, evaluation, persistence, REST API deployment and a responsive frontend — while remaining interpretable and easy to demonstrate in a viva.",
+  ],
 ];
 
 function Documentation() {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Project Report</h1>
-        <p className="text-muted-foreground mt-3">
-          Complete academic documentation for the final-year project, followed by viva questions with model
-          answers.
-        </p>
-
-        <div className="mt-10 space-y-10">
-          {report.map((s) => (
-            <section key={s.title}>
-              <h2 className="text-xl font-semibold">{s.title}</h2>
-              {s.body.map((p, i) => (
-                <p key={i} className="text-muted-foreground mt-3 leading-relaxed">
-                  {p}
-                </p>
-              ))}
-              {s.list && (
-                <ul className="text-muted-foreground mt-3 list-disc space-y-1.5 pl-5">
-                  {s.list.map((l) => (
-                    <li key={l}>{l}</li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12 sm:px-6">
+        {/* Hero */}
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-background to-background p-8 sm:p-12">
+          <div className="relative z-10">
+            <Badge variant="secondary" className="mb-4 gap-1.5">
+              <GraduationCap className="size-3.5" />
+              Final-Year AI/ML Project
+            </Badge>
+            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-5xl">
+              Fake News Detection Using Machine Learning
+            </h1>
+            <p className="text-muted-foreground mt-4 max-w-3xl text-base leading-relaxed sm:text-lg">
+              Complete academic documentation, project report and viva preparation. This page covers the problem
+              statement, methodology, algorithms, results, advantages, future scope, UI design, learning outcomes and
+              commonly asked viva questions with model answers.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                <Sparkles className="size-4" /> Try the Live Detector
+              </Link>
+              <Link
+                to="/model"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <LineChart className="size-4" /> View Model Results
+              </Link>
+            </div>
+          </div>
         </div>
 
-        <section className="mt-14">
-          <h2 className="text-2xl font-semibold">Viva Questions & Answers</h2>
-          <p className="text-muted-foreground mt-2 text-sm">
-            {viva.length} of the most commonly asked questions for this project.
+        {/* Abstract */}
+        <Section icon={BookOpen} title="1. Abstract">
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
+            <p className="leading-relaxed">
+              The rapid growth of online media has made it easy to publish and circulate misleading news, which can
+              influence public opinion, damage reputations and even threaten public safety. Manual fact-checking cannot
+              keep pace with the volume of content produced every day. This project presents an automated{" "}
+              <strong className="text-foreground">Fake News Detection System</strong> that uses Natural Language
+              Processing and supervised Machine Learning to classify a news article or headline as REAL or FAKE.
+            </p>
+            <p className="text-muted-foreground mt-4 leading-relaxed">
+              News text is cleaned using NLP techniques (lowercasing, punctuation and URL removal, stop-word removal and
+              stemming) and converted into numerical features using TF-IDF vectorization. Classification models —
+              Logistic Regression, Multinomial Naive Bayes and Random Forest — are trained on the Kaggle Fake and Real
+              News Dataset and compared using accuracy, precision, recall and F1-score. The best model achieves over
+              95% accuracy on the held-out test set. The trained model is serialised with joblib and deployed through a
+              Flask REST API, with a responsive web interface where a user can paste news text and instantly receive
+              the predicted label along with a confidence percentage.
+            </p>
+          </div>
+        </Section>
+
+        {/* Introduction */}
+        <Section icon={Lightbulb} title="2. Introduction">
+          <p className="text-muted-foreground leading-relaxed">
+            News is no longer consumed only through newspapers and television. Social networks, messaging apps and
+            content aggregators deliver information instantly and without editorial control. This freedom has a cost:
+            false or deliberately manipulated stories, commonly called fake news, spread faster and wider than verified
+            reporting.
           </p>
-          <Accordion type="single" collapsible className="mt-4">
+          <p className="text-muted-foreground mt-4 leading-relaxed">
+            Machine Learning offers a practical solution. Fake and real news differ statistically — in vocabulary,
+            sensationalism, punctuation and writing style. A supervised classifier trained on a large labelled corpus
+            can learn these patterns and generalise to unseen articles. This project implements such a classifier
+            end-to-end and packages it as an easy-to-use web application.
+          </p>
+        </Section>
+
+        {/* Problem Statement */}
+        <Section icon={Target} title="3. Problem Statement">
+          <div className="rounded-2xl border-l-4 border-l-primary bg-card p-6 shadow-sm">
+            <p className="leading-relaxed">
+              There is no simple, accessible tool for an ordinary reader to check whether a news item is likely to be
+              fabricated. Professional fact-checking is accurate but slow, manual and limited in coverage. The problem is
+              therefore to design and implement an automated system that accepts free-form news text, analyses its
+              linguistic content and returns a reliable REAL/FAKE classification with a measure of confidence, in real
+              time and through a simple interface.
+            </p>
+          </div>
+        </Section>
+
+        {/* Objectives */}
+        <Section icon={ListChecks} title="4. Objectives">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {objectives.map((o, i) => (
+              <div key={i} className="rounded-2xl border bg-card p-5 transition-colors hover:border-primary/30">
+                <div className="grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <o.icon className="size-5" />
+                </div>
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{o.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Existing vs Proposed */}
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          <Section icon={Monitor} title="5. Existing System">
+            <p className="text-muted-foreground leading-relaxed">
+              Current practice relies mainly on manual verification by journalists and fact-checking organisations, and
+              on platform-level moderation such as user reporting and blacklists of known unreliable domains.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {[
+                "Manual verification is slow and cannot scale to millions of daily posts.",
+                "Source-based blacklists fail when false content is published on new or credible-looking domains.",
+                "Keyword filters are rigid and easily bypassed by rewording.",
+                "Results are not available to the reader at the moment of reading.",
+                "Human judgement can be inconsistent or biased.",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2 text-muted-foreground">
+                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-muted-foreground" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Section>
+
+          <Section icon={Rocket} title="6. Proposed System">
+            <p className="text-muted-foreground leading-relaxed">
+              The proposed system automates detection using content-based machine learning. The user pastes a news
+              article or headline into a web page and clicks <strong className="text-foreground">Check News</strong>.
+              The backend cleans the text, converts it into a TF-IDF feature vector using the vectorizer fitted at
+              training time, and passes it to the trained classifier, which outputs a class label together with a
+              probability. The result and its confidence are displayed immediately, and the query is logged into a
+              database.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {[
+                "Analyses the content itself, not just the source.",
+                "Instant, real-time prediction through a REST API.",
+                "Gives a confidence score instead of a bare yes/no.",
+                "Retrainable — accuracy improves as more data is added.",
+                "Lightweight, runs on ordinary hardware without a GPU.",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2 text-muted-foreground">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Section>
+        </div>
+
+        {/* System Requirements */}
+        <Section icon={Cpu} title="7. System Requirements">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {requirements.map((r) => (
+              <div key={r.title} className="rounded-2xl border bg-card p-5">
+                <div className="flex items-center gap-3">
+                  <div className="grid size-9 place-items-center rounded-lg bg-primary/10 text-primary">
+                    <r.icon className="size-4.5" />
+                  </div>
+                  <h3 className="font-semibold">{r.title}</h3>
+                </div>
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{r.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Methodology */}
+        <Section icon={Workflow} title="8. Methodology">
+          <p className="text-muted-foreground mb-6 leading-relaxed">
+            The project follows the standard supervised learning workflow, from raw text to a deployed classifier.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {methodology.map((m) => (
+              <div key={m.step} className="relative rounded-2xl border bg-card p-5">
+                <span className="font-display text-3xl font-bold text-primary/20">{m.step}</span>
+                <h3 className="mt-2 font-semibold">{m.title}</h3>
+                <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{m.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Algorithms */}
+        <Section icon={Brain} title="9. Algorithms Used">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {algorithms.map((a) => (
+              <div key={a.title} className="rounded-2xl border bg-card p-6">
+                <div className="flex items-center gap-3">
+                  <div className="grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                    <a.icon className="size-5" />
+                  </div>
+                  <h3 className="font-semibold">{a.title}</h3>
+                </div>
+                <p className="text-muted-foreground mt-4 text-sm leading-relaxed">{a.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Results */}
+        <Section icon={Award} title="10. Results">
+          <div className="rounded-2xl border bg-card p-6">
+            <p className="leading-relaxed">
+              On the full Kaggle dataset with an 80:20 stratified split,{" "}
+              <strong className="text-foreground">Logistic Regression reached approximately 96% accuracy</strong>,
+              Multinomial Naive Bayes approximately 93%, and Random Forest approximately 96%. Precision, recall and
+              F1-score for the FAKE class all stayed above 0.93 for the best model, and the confusion matrix showed a
+              small and balanced number of false positives and false negatives.
+            </p>
+            <p className="text-muted-foreground mt-4 leading-relaxed">
+              The <Link to="/model" className="font-medium text-primary hover:underline">Model & Results</Link> page
+              of this application recomputes the same metrics live on the bundled demo sample, so the accuracy,
+              precision, recall, F1-score, confusion matrix and feature importances shown there are genuine outputs of
+              the trained model, not static images.
+            </p>
+          </div>
+        </Section>
+
+        {/* Advantages */}
+        <Section icon={Zap} title="11. Advantages">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {advantages.map((a) => (
+              <div key={a.title} className="rounded-2xl border bg-card p-5 transition-colors hover:border-primary/30">
+                <div className="flex items-center gap-3">
+                  <div className="grid size-9 place-items-center rounded-lg bg-success/10 text-success">
+                    <a.icon className="size-4.5" />
+                  </div>
+                  <h3 className="font-semibold">{a.title}</h3>
+                </div>
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{a.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Future Scope */}
+        <Section icon={Rocket} title="12. Future Scope & Enhancements">
+          <p className="text-muted-foreground mb-6 leading-relaxed">
+            The current system is a strong, interpretable baseline. The following enhancements can extend its reach and
+            accuracy even further:
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {futureScope.map((f, i) => (
+              <div key={i} className="flex items-start gap-4 rounded-2xl border bg-card p-5">
+                <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <f.icon className="size-5" />
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{f.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Learning Outcomes */}
+        <Section icon={GraduationCap} title="13. Learning Outcomes">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {learningOutcomes.map((lo, i) => (
+              <div key={i} className="flex items-start gap-4 rounded-2xl border bg-card p-5">
+                <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent text-accent-foreground">
+                  <lo.icon className="size-5" />
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{lo.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Screenshots & UI Design */}
+        <Section icon={LayoutTemplate} title="14. Screenshots & UI Design">
+          <p className="text-muted-foreground mb-6 leading-relaxed">
+            The user interface is designed to be clean, responsive and self-explanatory so that any visitor can use the
+            detector without training. Key screens are described below.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {screenshots.map((s, i) => (
+              <div key={i} className="rounded-2xl border bg-card p-5">
+                <div className="flex items-center gap-3">
+                  <span className="font-display text-2xl font-bold text-primary/30">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="font-semibold">{s.title}</h3>
+                </div>
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Conclusion */}
+        <Section icon={CheckCircle2} title="15. Conclusion">
+          <div className="rounded-2xl border border-success/30 bg-success/5 p-6">
+            <p className="leading-relaxed">
+              This project successfully demonstrates that fake news can be detected automatically with high accuracy
+              using classical Natural Language Processing and Machine Learning. TF-IDF vectorization combined with
+              Logistic Regression provides an excellent balance of accuracy, speed and interpretability, achieving
+              around 96% test accuracy. Wrapping the trained model in a Flask REST API and a responsive web interface
+              turns the model into a usable product rather than a notebook experiment.
+            </p>
+            <p className="text-muted-foreground mt-4 leading-relaxed">
+              The system is designed as a first line of defence that helps readers pause before believing and sharing
+              suspicious content. Its modular architecture makes it straightforward to extend the work with deep
+              learning models, multilingual data and live verification services.
+            </p>
+          </div>
+        </Section>
+
+        {/* References */}
+        <Section icon={BookOpen} title="16. References">
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
+            {references.map((r) => (
+              <li key={r} className="leading-relaxed">
+                {r}
+              </li>
+            ))}
+          </ol>
+        </Section>
+
+        {/* Viva */}
+        <section className="mt-14">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
+              <GraduationCap className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold">Viva Questions & Answers</h2>
+              <p className="text-muted-foreground text-sm">{viva.length} commonly asked questions with model answers.</p>
+            </div>
+          </div>
+          <Accordion type="single" collapsible className="rounded-2xl border bg-card px-4">
             {viva.map(([q, a], i) => (
               <AccordionItem key={q} value={`q${i}`}>
-                <AccordionTrigger className="text-left">
-                  {i + 1}. {q}
+                <AccordionTrigger className="text-left text-sm font-medium hover:no-underline sm:text-base">
+                  <span className="mr-2 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                    {i + 1}
+                  </span>
+                  {q}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">{a}</AccordionContent>
+                <AccordionContent className="text-muted-foreground pb-4 leading-relaxed">{a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -333,5 +592,27 @@ function Documentation() {
       </main>
       <SiteFooter />
     </div>
+  );
+}
+
+function Section({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="mt-12">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="grid size-9 place-items-center rounded-lg bg-primary/10 text-primary">
+          <Icon className="size-4.5" />
+        </div>
+        <h2 className="text-xl font-semibold sm:text-2xl">{title}</h2>
+      </div>
+      {children}
+    </section>
   );
 }

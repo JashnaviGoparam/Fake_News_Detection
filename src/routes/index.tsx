@@ -1,6 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { AlertTriangle, BadgeCheck, Loader2, RotateCcw, ShieldAlert, Sparkles } from "lucide-react";
+import {
+  AlertTriangle,
+  BadgeCheck,
+  Brain,
+  FlaskConical,
+  Loader2,
+  RotateCcw,
+  Search,
+  ShieldAlert,
+  ShieldCheck,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { Button } from "@/components/ui/button";
@@ -35,6 +47,20 @@ const SAMPLES = [
 ];
 
 const MIN_CHARS = 20;
+
+const steps = [
+  { icon: Search, title: "Paste", text: "Copy any news headline or article into the input area." },
+  { icon: FlaskConical, title: "Preprocess", text: "The text is cleaned, tokenized, stemmed and stop words are removed." },
+  { icon: Brain, title: "Vectorize", text: "TF-IDF converts the cleaned text into a weighted numeric feature vector." },
+  { icon: ShieldCheck, title: "Classify", text: "Logistic Regression predicts REAL or FAKE with a confidence score." },
+];
+
+const features = [
+  { icon: Zap, title: "Instant", text: "Sub-second prediction in the browser, no server needed." },
+  { icon: Brain, title: "Explainable", text: "See the confidence and the words that influenced the decision." },
+  { icon: ShieldCheck, title: "Accurate", text: "Trained on 44K+ articles and validated with precision, recall and F1-score." },
+  { icon: FlaskConical, title: "Academic", text: "Complete Python/Flask + scikit-learn reference included in /python." },
+];
 
 function Detector() {
   const [text, setText] = useState("");
@@ -85,14 +111,15 @@ function Detector() {
             Fake News Detection Using Machine Learning
           </h1>
           <p className="text-muted-foreground mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">
-            Paste a news headline or article below. The trained classifier cleans the text, converts it into
-            TF-IDF features and predicts whether the content reads as <strong className="text-foreground">REAL</strong>{" "}
-            or <strong className="text-foreground">FAKE</strong> news — along with a confidence score.
+            Paste a news headline or article below. The trained classifier cleans the text, converts it into TF-IDF
+            features and predicts whether the content reads as{" "}
+            <strong className="text-foreground">REAL</strong> or <strong className="text-foreground">FAKE</strong>{" "}
+            news — along with a confidence score.
           </p>
         </section>
 
         <section className="mx-auto grid max-w-6xl gap-6 px-4 pb-16 sm:px-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="border-border bg-card rounded-2xl border p-5 shadow-sm sm:p-6">
+          <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
             <label htmlFor="news-input" className="text-sm font-medium">
               News article or headline
             </label>
@@ -149,7 +176,7 @@ function Detector() {
                       setResult(null);
                       setError(null);
                     }}
-                    className="border-border hover:bg-muted rounded-lg border px-3 py-2 text-left text-sm transition-colors"
+                    className="rounded-lg border border-border px-3 py-2 text-left text-sm transition-colors hover:bg-muted"
                   >
                     {s.slice(0, 90)}…
                   </button>
@@ -160,7 +187,7 @@ function Detector() {
 
           <div className="space-y-6">
             <ResultCard result={result} busy={busy} />
-            <div className="border-border bg-card rounded-2xl border p-5 text-sm">
+            <div className="rounded-2xl border border-border bg-card p-5 text-sm">
               <h2 className="font-display text-base font-semibold">Live model snapshot</h2>
               <dl className="text-muted-foreground mt-3 space-y-2">
                 <Row label="Algorithm" value="Logistic Regression" />
@@ -172,6 +199,56 @@ function Detector() {
             </div>
           </div>
         </section>
+
+        {/* How it works */}
+        <section className="border-t border-border/60 bg-muted/30 py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <div className="text-center">
+              <p className="text-muted-foreground text-sm font-medium tracking-wide uppercase">Pipeline</p>
+              <h2 className="font-display mt-2 text-2xl font-semibold sm:text-3xl">How It Works</h2>
+            </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {steps.map((s) => (
+                <div key={s.title} className="rounded-2xl border bg-card p-5 text-center">
+                  <div className="mx-auto grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
+                    <s.icon className="size-5" />
+                  </div>
+                  <p className="mt-4 font-semibold">{s.title}</p>
+                  <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{s.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <div className="text-center">
+              <p className="text-muted-foreground text-sm font-medium tracking-wide uppercase">Why this project</p>
+              <h2 className="font-display mt-2 text-2xl font-semibold sm:text-3xl">Key Highlights</h2>
+            </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {features.map((f) => (
+                <div key={f.title} className="rounded-2xl border bg-card p-5 transition-colors hover:border-primary/30">
+                  <div className="grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                    <f.icon className="size-5" />
+                  </div>
+                  <p className="mt-4 font-semibold">{f.title}</p>
+                  <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{f.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <Link
+                to="/model"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <Brain className="size-4" /> Explore model metrics
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
       <SiteFooter />
     </div>
@@ -180,7 +257,7 @@ function Detector() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border-border/60 flex justify-between gap-4 border-b pb-2 last:border-0 last:pb-0">
+    <div className="flex justify-between gap-4 border-b border-border/60 pb-2 last:border-0 last:pb-0">
       <dt>{label}</dt>
       <dd className="text-foreground font-medium">{value}</dd>
     </div>
@@ -190,7 +267,7 @@ function Row({ label, value }: { label: string; value: string }) {
 function ResultCard({ result, busy }: { result: Prediction | null; busy: boolean }) {
   if (busy) {
     return (
-      <div className="border-border bg-card text-muted-foreground grid min-h-56 place-items-center rounded-2xl border p-6 text-sm">
+      <div className="grid min-h-56 place-items-center rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
         <span className="flex items-center gap-2">
           <Loader2 className="size-4 animate-spin" /> Running preprocessing → TF-IDF → prediction…
         </span>
@@ -200,7 +277,7 @@ function ResultCard({ result, busy }: { result: Prediction | null; busy: boolean
 
   if (!result) {
     return (
-      <div className="border-border bg-card text-muted-foreground grid min-h-56 place-items-center rounded-2xl border border-dashed p-6 text-center text-sm">
+      <div className="grid min-h-56 place-items-center rounded-2xl border border-dashed border-border bg-card p-6 text-center text-sm text-muted-foreground">
         The prediction, confidence score and the words that influenced the decision will appear here.
       </div>
     );
@@ -215,11 +292,7 @@ function ResultCard({ result, busy }: { result: Prediction | null; busy: boolean
       )}
     >
       <div className="flex items-center gap-3">
-        {fake ? (
-          <ShieldAlert className="text-destructive size-7" />
-        ) : (
-          <BadgeCheck className="text-success size-7" />
-        )}
+        {fake ? <ShieldAlert className="size-7 text-destructive" /> : <BadgeCheck className="size-7 text-success" />}
         <div>
           <p className="text-muted-foreground text-xs tracking-wide uppercase">Prediction</p>
           <p className={cn("font-display text-2xl font-semibold", fake ? "text-destructive" : "text-success")}>
@@ -233,7 +306,7 @@ function ResultCard({ result, busy }: { result: Prediction | null; busy: boolean
           <span className="text-muted-foreground">Confidence</span>
           <span className="font-semibold">{(result.confidence * 100).toFixed(1)}%</span>
         </div>
-        <div className="bg-muted h-2.5 w-full overflow-hidden rounded-full">
+        <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
           <div
             className={cn("h-full rounded-full transition-all", fake ? "bg-destructive" : "bg-success")}
             style={{ width: `${Math.round(result.confidence * 100)}%` }}
@@ -246,17 +319,15 @@ function ResultCard({ result, busy }: { result: Prediction | null; busy: boolean
       </div>
 
       {result.lowSignal && (
-        <p className="border-border text-muted-foreground mt-4 rounded-lg border border-dashed p-3 text-xs">
-          Very few words of this text appear in the training vocabulary, so treat this prediction with caution.
-          Longer text gives a more reliable result.
+        <p className="mt-4 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
+          Very few words of this text appear in the training vocabulary, so treat this prediction with caution. Longer
+          text gives a more reliable result.
         </p>
       )}
 
       {result.influential.length > 0 && (
         <div className="mt-5">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Most influential words
-          </p>
+          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Most influential words</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {result.influential.map((t) => (
               <span

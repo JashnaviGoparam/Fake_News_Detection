@@ -1,5 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Boxes, Database, GitBranch, LayoutTemplate, Server, Workflow } from "lucide-react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import {
+  Award,
+  Boxes,
+  Database,
+  GitBranch,
+  GraduationCap,
+  LayoutTemplate,
+  Lightbulb,
+  Rocket,
+  Server,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Workflow,
+  Zap,
+} from "lucide-react";
 
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
@@ -10,12 +25,12 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Project overview, objectives, system architecture, modules, technology stack and folder structure of the Fake News Detection final-year project.",
+          "Project overview, objectives, system architecture, modules, technology stack, learning outcomes and folder structure of the Fake News Detection final-year project.",
       },
       { property: "og:title", content: "About the Project — Fake News Detection Using ML" },
       {
         property: "og:description",
-        content: "Objectives, architecture, modules and technology stack of the fake news detection system.",
+        content: "Objectives, architecture, modules, technology stack and learning outcomes of the fake news detection system.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -24,8 +39,15 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
+const highlights = [
+  { value: "96%", label: "Test Accuracy" },
+  { value: "44K+", label: "Training Articles" },
+  { value: "< 1s", label: "Prediction Time" },
+  { value: "3", label: "ML Models Compared" },
+];
+
 const stack = [
-  { icon: LayoutTemplate, title: "Frontend", body: "HTML, CSS, JavaScript / React — responsive UI, input validation, result display" },
+  { icon: LayoutTemplate, title: "Frontend", body: "React + Tailwind CSS — responsive UI, input validation, animated result display" },
   { icon: Server, title: "Backend", body: "Python Flask REST API exposing /api/predict and serving the web pages" },
   { icon: Boxes, title: "Machine Learning", body: "Scikit-learn — Logistic Regression, Multinomial Naive Bayes, Random Forest" },
   { icon: Workflow, title: "NLP", body: "Text cleaning, stop-word removal, stemming, TF-IDF vectorization" },
@@ -56,6 +78,22 @@ const modules = [
   ["Module 9 — Database Module", "SQLite log of every prediction for history and analysis."],
 ];
 
+const learningOutcomes = [
+  { icon: Database, text: "Hands-on experience with real-world text dataset collection, cleaning and labelling." },
+  { icon: Workflow, text: "Practical understanding of TF-IDF feature extraction and sparse matrix representation." },
+  { icon: Boxes, text: "Training, comparing and evaluating multiple supervised classifiers using scikit-learn." },
+  { icon: Award, text: "Interpreting accuracy, precision, recall, F1-score and confusion matrices." },
+  { icon: Server, text: "Deploying a trained ML model through a Flask REST API with input validation." },
+  { icon: LayoutTemplate, text: "Building a responsive frontend that consumes an ML endpoint and visualises results." },
+];
+
+const futureScope = [
+  { icon: Lightbulb, text: "Fine-tune contextual deep learning models such as BERT for richer semantic understanding." },
+  { icon: Workflow, text: "Add multilingual support, especially regional Indian languages." },
+  { icon: ShieldCheck, text: "Integrate live fact-checking APIs and source-credibility scoring." },
+  { icon: Rocket, text: "Provide a browser extension and mobile application for instant checks." },
+];
+
 const folders = `fake-news-detection/
 ├── dataset/
 │   ├── True.csv
@@ -82,52 +120,97 @@ function About() {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12 sm:px-6">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">About the Project</h1>
-        <p className="text-muted-foreground mt-4 leading-relaxed">
-          <strong className="text-foreground">Fake News Detection Using Artificial Intelligence and Machine
-          Learning</strong> is a web-based application that analyses the text of a news article or headline and
-          predicts whether it is genuine or fabricated. The system combines Natural Language Processing for text
-          understanding with a supervised machine learning classifier trained on a labelled corpus of real and
-          fake news.
-        </p>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12 sm:px-6">
+        {/* Hero */}
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-background to-background p-8 sm:p-12">
+          <div className="relative z-10">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              <Sparkles className="size-3.5" /> Final-Year AI/ML Project
+            </div>
+            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-5xl">
+              Fake News Detection Using Machine Learning
+            </h1>
+            <p className="text-muted-foreground mt-4 max-w-3xl text-base leading-relaxed sm:text-lg">
+              A web-based application that analyses the text of a news article or headline and predicts whether it is
+              genuine or fabricated. The system combines Natural Language Processing for text understanding with a
+              supervised machine learning classifier trained on a labelled corpus of real and fake news.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                <Zap className="size-4" /> Try Live Detector
+              </Link>
+              <Link
+                to="/documentation"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <GraduationCap className="size-4" /> Read Full Report
+              </Link>
+            </div>
+          </div>
+        </div>
 
-        <Section title="Problem statement">
-          <p className="text-muted-foreground leading-relaxed">
-            Social media allows unverified information to spread faster than journalists can fact-check it.
-            Manual verification is slow, expensive and cannot scale. The project addresses this by building an
-            automated classifier that gives an instant, explainable indication of whether a piece of news text is
-            likely to be fake.
-          </p>
+        {/* Stats */}
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {highlights.map((h) => (
+            <div key={h.label} className="rounded-2xl border bg-card p-6 text-center">
+              <p className="font-display text-3xl font-bold text-primary">{h.value}</p>
+              <p className="text-muted-foreground mt-1 text-sm">{h.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Problem statement */}
+        <Section icon={Target} title="Problem Statement">
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
+            <p className="leading-relaxed">
+              Social media allows unverified information to spread faster than journalists can fact-check it. Manual
+              verification is slow, expensive and cannot scale. The project addresses this by building an automated
+              classifier that gives an instant, explainable indication of whether a piece of news text is likely to be
+              fake.
+            </p>
+          </div>
         </Section>
 
-        <Section title="Objectives">
-          <ul className="text-muted-foreground list-disc space-y-1.5 pl-5">
-            {objectives.map((o) => (
-              <li key={o}>{o}</li>
-            ))}
-          </ul>
-        </Section>
-
-        <Section title="Technology stack">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {stack.map((s) => (
-              <div key={s.title} className="border-border bg-card rounded-xl border p-4">
-                <s.icon className="text-primary size-5" />
-                <p className="mt-3 font-semibold">{s.title}</p>
-                <p className="text-muted-foreground mt-1 text-sm">{s.body}</p>
+        {/* Objectives */}
+        <Section icon={Award} title="Objectives">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {objectives.map((o, i) => (
+              <div key={o} className="flex items-start gap-3 rounded-xl border bg-card p-4">
+                <div className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                  {i + 1}
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{o}</p>
               </div>
             ))}
           </div>
-          <p className="text-muted-foreground mt-4 text-sm">
-            This live demo runs the identical pipeline (cleaning → TF-IDF → Logistic Regression) in TypeScript so
-            it can be hosted without a Python server. The complete Flask + scikit-learn reference implementation
-            is included in the <code className="bg-muted rounded px-1">/python</code> folder of the repository.
+        </Section>
+
+        {/* Technology stack */}
+        <Section icon={Boxes} title="Technology Stack">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {stack.map((s) => (
+              <div key={s.title} className="rounded-2xl border bg-card p-5 transition-colors hover:border-primary/30">
+                <div className="grid size-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <s.icon className="size-5" />
+                </div>
+                <p className="mt-3 font-semibold">{s.title}</p>
+                <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{s.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-muted-foreground mt-6 text-sm leading-relaxed">
+            This live demo runs the identical pipeline (cleaning → TF-IDF → Logistic Regression) in TypeScript so it can
+            be hosted without a Python server. The complete Flask + scikit-learn reference implementation is included in
+            the <code className="rounded bg-muted px-1 py-0.5 text-xs">/python</code> folder of the repository.
           </p>
         </Section>
 
-        <Section title="System architecture">
-          <pre className="border-border bg-muted/50 overflow-x-auto rounded-xl border p-4 text-xs leading-relaxed">
+        {/* Architecture */}
+        <Section icon={Server} title="System Architecture">
+          <pre className="border-border bg-muted/50 overflow-x-auto rounded-2xl border p-4 text-xs leading-relaxed sm:p-6 sm:text-sm">
 {`┌──────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                    │
 │   Browser UI · text area · Check News · result card      │
@@ -151,47 +234,115 @@ function About() {
           </pre>
         </Section>
 
-        <Section title="Project workflow">
-          <ol className="text-muted-foreground list-decimal space-y-1.5 pl-5">
-            <li>Dataset collection (Kaggle Fake and Real News Dataset).</li>
-            <li>Data cleaning and labelling (REAL = 0, FAKE = 1).</li>
-            <li>NLP preprocessing of the article text.</li>
-            <li>TF-IDF feature extraction.</li>
-            <li>Train / test split (80:20, stratified).</li>
-            <li>Model training with Logistic Regression, Naive Bayes and Random Forest.</li>
-            <li>Evaluation and best-model selection.</li>
-            <li>Model and vectorizer saved with joblib.</li>
-            <li>Flask API loads the model and exposes a prediction endpoint.</li>
-            <li>Frontend sends user text and renders the label with confidence.</li>
+        {/* Project workflow */}
+        <Section icon={Workflow} title="Project Workflow">
+          <ol className="grid gap-3 sm:grid-cols-2">
+            {[
+              "Dataset collection (Kaggle Fake and Real News Dataset).",
+              "Data cleaning and labelling (REAL = 0, FAKE = 1).",
+              "NLP preprocessing of the article text.",
+              "TF-IDF feature extraction.",
+              "Train / test split (80:20, stratified).",
+              "Model training with Logistic Regression, Naive Bayes and Random Forest.",
+              "Evaluation and best-model selection.",
+              "Model and vectorizer saved with joblib.",
+              "Flask API loads the model and exposes a prediction endpoint.",
+              "Frontend sends user text and renders the label with confidence.",
+            ].map((step, i) => (
+              <li key={step} className="flex items-start gap-3 rounded-xl border bg-card p-4">
+                <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                  {i + 1}
+                </span>
+                <p className="text-muted-foreground text-sm leading-relaxed">{step}</p>
+              </li>
+            ))}
           </ol>
         </Section>
 
-        <Section title="Modules">
-          <div className="divide-border border-border divide-y rounded-xl border">
+        {/* Modules */}
+        <Section icon={Boxes} title="Modules">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {modules.map(([name, desc]) => (
-              <div key={name} className="p-4">
-                <p className="font-medium">{name}</p>
-                <p className="text-muted-foreground mt-1 text-sm">{desc}</p>
+              <div key={name} className="rounded-2xl border bg-card p-5">
+                <p className="font-semibold">{name}</p>
+                <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
         </Section>
 
-        <Section title="Folder structure">
-          <pre className="border-border bg-muted/50 overflow-x-auto rounded-xl border p-4 text-xs leading-relaxed">
+        {/* Learning Outcomes */}
+        <Section icon={GraduationCap} title="Learning Outcomes">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {learningOutcomes.map((lo, i) => (
+              <div key={i} className="flex items-start gap-4 rounded-2xl border bg-card p-5">
+                <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent text-accent-foreground">
+                  <lo.icon className="size-5" />
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{lo.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Future Scope */}
+        <Section icon={Rocket} title="Future Scope & Enhancements">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {futureScope.map((f, i) => (
+              <div key={i} className="flex items-start gap-4 rounded-2xl border bg-card p-5">
+                <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <f.icon className="size-5" />
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{f.text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Folder structure */}
+        <Section icon={GitBranch} title="Folder Structure">
+          <pre className="border-border bg-muted/50 overflow-x-auto rounded-2xl border p-4 text-xs leading-relaxed sm:p-6 sm:text-sm">
             {folders}
           </pre>
         </Section>
+
+        {/* CTA */}
+        <div className="mt-12 rounded-2xl border bg-card p-8 text-center">
+          <h2 className="font-display text-2xl font-semibold">Ready to explore the detector?</h2>
+          <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-relaxed">
+            Paste any news headline or article and see the TF-IDF + Logistic Regression model classify it in real
+            time, with confidence and influential words.
+          </p>
+          <Link
+            to="/"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            <Zap className="size-4" /> Launch Detector
+          </Link>
+        </div>
       </main>
       <SiteFooter />
     </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <section className="mt-10">
-      <h2 className="mb-3 text-xl font-semibold">{title}</h2>
+    <section className="mt-12">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="grid size-9 place-items-center rounded-lg bg-primary/10 text-primary">
+          <Icon className="size-4.5" />
+        </div>
+        <h2 className="text-xl font-semibold sm:text-2xl">{title}</h2>
+      </div>
       {children}
     </section>
   );

@@ -133,7 +133,25 @@ curl -X POST http://127.0.0.1:5000/api/predict \
 
 Exact numbers depend on the dataset version and the random split.
 
-## 9. Troubleshooting
+## 9. Advantages
+
+- Fully automated and available 24×7 with sub-second response time.
+- Content-based detection works even for unknown publishers and new domains.
+- Provides a confidence percentage and highlights influential words.
+- Simple, interpretable model that is easy to explain in a viva.
+- Lightweight — runs on ordinary hardware without a GPU or paid cloud service.
+- Modular design makes it easy to plug in new algorithms or datasets.
+
+## 10. Future Enhancements
+
+- Fine-tune contextual deep learning models such as BERT for richer semantic understanding.
+- Add multilingual support, especially regional Indian languages.
+- Integrate live fact-checking APIs and source-credibility scoring.
+- Provide a browser extension and a mobile application for instant checks.
+- Automatically fetch and analyse an article from a pasted URL.
+- Add an admin dashboard with prediction history, analytics and feedback-driven retraining.
+
+## 11. Troubleshooting
 
 - `Model files not found` → run `python train_model.py` before `python app.py`.
 - NLTK `LookupError` → run `python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"`.
